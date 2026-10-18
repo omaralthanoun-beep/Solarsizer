@@ -1,0 +1,554 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Solar Sizer Pro | م. عمر الذنون - جامعة حلب</title>
+  <!-- خط كايو العربي -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- أيقونات FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Cairo', 'sans-serif'] },
+          colors: {
+            indigo: {
+              950: '#0c1024',
+              900: '#1b1f3b', // كحلي نيلي فخم
+              800: '#2b2d5c',
+              700: '#3e4184',
+              600: '#4338ca',
+              500: '#4f46e5',
+              50: '#f6f7fb'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; color: black !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen pb-12">
+
+  <!-- الشريط العلوي -->
+  <header class="bg-indigo-900 text-white shadow-md border-b-2 border-indigo-500 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-3.5 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-white text-indigo-900 rounded-xl flex items-center justify-center text-xl font-black shadow-sm">
+          <i class="fa-solid fa-solar-panel"></i>
+        </div>
+        <div>
+          <h1 class="text-base md:text-xl font-extrabold tracking-tight">Solar Sizer Syria</h1>
+          <p class="text-[11px] md:text-xs text-indigo-200 font-semibold">قسم هندسة نظم القدرة - جامعة حلب | م. عمر</p>
+        </div>
+      </div>
+      <button onclick="window.print()" class="no-print bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-file-pdf text-amber-400"></i> طباعة PDF
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-3 sm:px-4 py-5 space-y-5">
+
+    <!-- 1. إعدادات الموقع والفصل والمعدات -->
+    <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h2 class="text-sm sm:text-base font-extrabold text-indigo-900 flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-indigo-600"></i> بيانات البيئة والمعدات المتوفرة
+        </h2>
+        <span class="text-[11px] bg-indigo-50 text-indigo-700 font-bold px-2.5 py-1 rounded-full border border-indigo-200">
+          معايير السوق السوري
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+        
+        <!-- المحافظة -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">المحافظة</label>
+          <select id="location" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-indigo-600">
+            <option value="aleppo" selected>حلب</option>
+            <option value="damascus">دمشق وريفها</option>
+            <option value="homs">حمص وحماة</option>
+            <option value="coastal">اللاذقية وطرطوس</option>
+            <option value="south">درعا والسويداء</option>
+            <option value="east">دير الزور والرقة</option>
+          </select>
+        </div>
+
+        <!-- الفصل التشغيلي -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">فصل التصميم الشمسي</label>
+          <select id="season" class="w-full bg-amber-50/60 border border-amber-300 rounded-xl p-2.5 text-xs font-bold text-amber-950 focus:bg-white focus:ring-2 focus:ring-indigo-600">
+            <option value="summer" selected>☀️ الصيف (ذروة إنتاج 6.5h)</option>
+            <option value="winter">❄️ الشتاء (حرج 3.0h - أيام غائمة)</option>
+            <option value="average">⚖️ متوسط سنوي متوازن (4.8h)</option>
+          </select>
+        </div>
+
+        <!-- جهد النظام -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">جهد النظام (DC)</label>
+          <select id="sysVoltage" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-indigo-600">
+            <option value="12">12V (منظومة صغيرة 1.2kW)</option>
+            <option value="24" selected>24V (منزلية 2.5kW - 3.5kW)</option>
+            <option value="48">48V (منظومة 5kW إلى 11kW)</option>
+          </select>
+        </div>
+
+        <!-- طراز الألواح -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">طراز الألواح المتوفرة</label>
+          <select id="panelWattage" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-indigo-600">
+            <option value="550" selected>550W Mono Half-Cell</option>
+            <option value="585">585W TOPCon N-Type</option>
+            <option value="600">600W ثنائي الوجه Bifacial</option>
+            <option value="670">670W إلى 700W HJT</option>
+            <option value="450">450W قياسي</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- نوع وماركة البطارية في السوق السوري -->
+      <div class="pt-2 border-t border-slate-100">
+        <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+          <i class="fa-solid fa-car-battery text-indigo-600"></i> ماركة ونوع البطارية المفضلة في السوق
+        </label>
+        <select id="batteryType" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-xs font-bold text-indigo-950 focus:bg-white focus:ring-2 focus:ring-indigo-600">
+          <optgroup label="⚡ بطاريات ليثيوم LiFePO4 (الأطول عمراً - تفريغ 90%)">
+            <option value="0.90|lithium|Felicity Solar" selected>Felicity Solar LiFePO4 (شائعة جداً - كفالة 5 سنوات)</option>
+            <option value="0.90|lithium|Pylontech / Dyness">Pylontech / Dyness (نخب أول ذكي BMS)</option>
+            <option value="0.90|lithium|Wings - EVE Cells">Wings الأجنحة (خلايا EVE درجة أولى)</option>
+            <option value="0.85|lithium|Promax / Romax">Promax Power / Romax (تجميع عالي الجودة)</option>
+          </optgroup>
+          <optgroup label="🔋 بطاريات أنبوبية سائلة Tubular C10 (تفريغ 55% - كلفة اقتصادية)">
+            <option value="0.55|tubular|Luminous Tall Tubular">لومينوس Luminous NRGT الهندية الأصلية (200Ah)</option>
+            <option value="0.55|tubular|Eastman / Exide">Eastman أو Exide الهندية (تحمل دورات شحن شاقة)</option>
+          </optgroup>
+          <optgroup label="🛡️ بطاريات جل كربونية Gel Deep Cycle (تفريغ 50% - لا تحتاج صيانة)">
+            <option value="0.50|gel|الريادة Al-Riyada">الريادة Al-Riyada (إنتاج وطني معتمد)</option>
+            <option value="0.50|gel|Outdo / Ritar">Outdo أو Ritar جل كربوني مستورد</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <!-- 2. جدول الأحمال بتصميم الكروت الرأسية المتجاوبة (حل مشكلة الموبايل) -->
+    <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-sm sm:text-base font-extrabold text-indigo-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-bolt text-amber-500"></i> قائمة الأجهزة والأحمال المنزلية
+          </h2>
+          <p class="text-[11px] text-slate-500">حدد فقط الأجهزة المستعملة وساعات عملها ليل/نهار</p>
+        </div>
+
+        <!-- زر التبديل بين الواط والأمبير -->
+        <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 self-stretch sm:self-auto justify-center">
+          <button id="btnWatt" onclick="setUnitMode('watt')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-indigo-950 shadow-sm transition">
+            حساب بالواط (W)
+          </button>
+          <button id="btnAmp" onclick="setUnitMode('amp')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-indigo-900 transition">
+            حساب بالأمبير (A @ 220V)
+          </button>
+        </div>
+      </div>
+
+      <!-- تنبيه وحدة القياس -->
+      <div id="unitBanner" class="p-2.5 bg-indigo-50 border border-indigo-200 rounded-xl text-indigo-900 text-xs flex items-center justify-between">
+        <span id="unitBannerText"><i class="fa-solid fa-circle-info text-indigo-600 ml-1"></i> وحدة القياس المفعلة: <strong>الواط (Watt)</strong></span>
+        <span class="text-[10px] text-slate-500">(1 أمبير ≈ 220 واط)</span>
+      </div>
+
+      <!-- حاوية البطاقات الرأسية للأجهزة (Cards Container) -->
+      <div id="loadsCardsContainer" class="space-y-3">
+        <!-- تتولد ديناميكياً لتناسب الموبايل بشكل مثالي وبدون قص نصوص -->
+      </div>
+
+      <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+        <button onclick="addCustomDevice()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold px-3.5 py-2 rounded-xl border border-indigo-200 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-plus-circle"></i> إضافة جهاز آخر
+        </button>
+        <span class="text-[11px] text-slate-400 font-semibold">* الأجهزة ذات العدد 0 تُهمل تلقائياً</span>
+      </div>
+    </div>
+
+    <!-- 3. زر توليد الحسابات المنفصل -->
+    <div class="text-center py-2 no-print">
+      <button onclick="runEngineeringEngine()" class="w-full sm:w-auto min-w-[280px] bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-black text-sm sm:text-base px-6 py-3.5 rounded-2xl shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 mx-auto transition-all">
+        <i class="fa-solid fa-calculator text-amber-300 text-lg"></i>
+        <span>توليد التقرير والحسابات الهندسية</span>
+      </button>
+    </div>
+
+    <!-- 4. نتائج التقرير والتوصيف الهندسي (مخفية وتظهر بعد الضغط) -->
+    <div id="reportSection" class="hidden space-y-5 pt-3">
+      
+      <div class="bg-indigo-950 text-white p-4 sm:p-6 rounded-2xl shadow-md border-r-4 border-amber-400">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
+          <div>
+            <span class="text-xs text-amber-400 font-bold">تقرير دراسة المنظومة</span>
+            <h3 class="text-base sm:text-xl font-black">النتائج التقديرية الموصى بها</h3>
+          </div>
+          <span id="badgeSeason" class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full text-indigo-200 border border-white/10">
+            تصميم صيفي
+          </span>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed">
+          تمت المعايرة وفق استهلاكك الفعلي: <span id="resTotalDailyKwh" class="text-amber-300 font-bold">0 kWh/يوم</span>، وذروة سحب متزامنة تصل إلى <span id="resPeakAmps" class="text-amber-300 font-bold">0 أمبير</span> على جهد 220V.
+        </p>
+      </div>
+
+      <!-- مقارنة الخيارات: خيار الليثيوم الموصى به مقابل الخيار الاقتصادي -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- الخيار الأول: الموصى به والحديث (ليثيوم) -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border-2 border-indigo-600 relative overflow-hidden">
+          <div class="absolute top-0 left-0 bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-br-xl uppercase">
+            الخيار الأمثل والحديث
+          </div>
+          <div class="flex items-center gap-2 text-indigo-900 font-bold text-sm mb-3">
+            <i class="fa-solid fa-star text-amber-400"></i>
+            <h4>منظومة ليثيوم LiFePO4 المتطورة</h4>
+          </div>
+          <div class="space-y-2.5 text-xs">
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">حقل الألواح:</span>
+              <span id="opt1Panels" class="font-bold text-slate-800">0 ألواح (0 W)</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">بنك البطاريات:</span>
+              <span id="opt1Battery" class="font-bold text-indigo-950">0 Ah ليثيوم</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">الماركة المقترحة:</span>
+              <span id="opt1Brand" class="font-bold text-indigo-700">Felicity Solar</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">الإنفرتر الموصى به:</span>
+              <span id="opt1Inverter" class="font-bold text-slate-800">0 kW Hybrid</span>
+            </div>
+            <div class="flex justify-between py-1.5 text-emerald-700 font-bold">
+              <span>العمر التشغيلي المتوقع:</span>
+              <span>8 - 12 سنة (أكثر من 5000 دورة)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- الخيار الثاني: الخيار الاقتصادي (أنبوبية أو جل) -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 relative">
+          <div class="flex items-center gap-2 text-slate-700 font-bold text-sm mb-3">
+            <i class="fa-solid fa-coins text-amber-500"></i>
+            <h4>الخيار الاقتصادي (أنبوبي / جل)</h4>
+          </div>
+          <div class="space-y-2.5 text-xs">
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">حقل الألواح:</span>
+              <span id="opt2Panels" class="font-bold text-slate-800">0 ألواح</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">سعة البطاريات (تفريغ 50%):</span>
+              <span id="opt2Battery" class="font-bold text-indigo-950">0 Ah (سعة مضاعفة)</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">الماركة المقترحة:</span>
+              <span class="font-bold text-slate-700">Luminous الهندية / الريادة</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-100">
+              <span class="text-slate-500">الإنفرتر المطلوب:</span>
+              <span id="opt2Inverter" class="font-bold text-slate-800">نفس الاستطاعة</span>
+            </div>
+            <div class="flex justify-between py-1.5 text-slate-600 font-bold">
+              <span>العمر التشغيلي المتوقع:</span>
+              <span>2.5 - 4 سنوات (تتطلب مراقبة)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- المواصفات الهندسية وقواطع الحماية -->
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+        <h4 class="text-xs sm:text-sm font-bold text-indigo-950 mb-3 border-b pb-2 flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-emerald-600"></i> التوصيفات الكهربائية الدقيقة للكابلات والحماية
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+            <span class="text-slate-500 block mb-1">مقطع كابل البطارية (DC)</span>
+            <span id="specCable" class="text-sm font-black text-indigo-900">-- mm²</span>
+          </div>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+            <span class="text-slate-500 block mb-1">قاطع حماية البطاريات (DC Breaker)</span>
+            <span id="specDcBreaker" class="text-sm font-black text-indigo-900">-- A</span>
+          </div>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+            <span class="text-slate-500 block mb-1">تيار شحن البطارية الآمن</span>
+            <span id="specChargeCurrent" class="text-sm font-black text-indigo-900">-- A</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- الإرشادات الفنية لإطالة عمر المنظومة -->
+      <div class="bg-indigo-900 text-white p-4 sm:p-5 rounded-2xl shadow-sm text-xs space-y-2.5">
+        <div class="flex items-center gap-2 text-amber-300 font-bold text-sm">
+          <i class="fa-solid fa-lightbulb"></i> نصائح م. عمر الذنون التشغيلية للزبون:
+        </div>
+        <p class="leading-relaxed text-indigo-100">
+          • <strong>فصل الشتاء:</strong> ينخفض سطوع الشمس في سوريا بنسبة 50%؛ احرص على تشغيل الغسالة ومضخة المياه فقط في الأيام المشمسة ما بين الساعة 11:00 صباحاً و 1:30 ظهراً لتجنب إجهاد البطاريات.
+        </p>
+        <p class="leading-relaxed text-indigo-100">
+          • <strong>التفريغ الليلي:</strong> تم احتساب بنك البطاريات ليتحمل أحمالك الليلية بمعدل سحب لا يتجاوز <strong id="tipNightCurrent" class="text-amber-300">0 أمبير</strong>؛ تخفيف الإنارة وأجهزة الستاندباي ليلاً يضمن بقاء جهد البطارية آمناً حتى الصباح.
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="mt-8 text-center text-xs text-slate-500">
+    <p class="font-bold text-indigo-950">Solar Sizer Syria • كلية الهندسة الكهربائية والإلكترونية</p>
+    <p class="text-[11px] mt-0.5">جامعة حلب</p>
+  </footer>
+
+  <!-- جافاسكريبت -->
+  <script>
+    let unitMode = 'watt'; // 'watt' أو 'amp'
+
+    // قائمة الأجهزة الشائعة بقيم صفرية مبدئياً
+    let devices = [
+      { id: 1, name: 'براد منزلي إنفرتر', qty: 0, val: 150, dayH: 6, nightH: 6, icon: 'fa-snowflake' },
+      { id: 2, name: 'إنارة منازل LED (مجموعة)', qty: 0, val: 10, dayH: 0, nightH: 5, icon: 'fa-lightbulb' },
+      { id: 3, name: 'شاشة تلفزيون + راوتر نت', qty: 0, val: 100, dayH: 2, nightH: 4, icon: 'fa-tv' },
+      { id: 4, name: 'شواحن لابتوب وموبايل', qty: 0, val: 40, dayH: 2, nightH: 3, icon: 'fa-mobile-screen' },
+      { id: 5, name: 'مكيف إنفرتر (1 طن تبريد)', qty: 0, val: 750, dayH: 4, nightH: 0, icon: 'fa-fan' },
+      { id: 6, name: 'غسالة ملابس', qty: 0, val: 400, dayH: 2, nightH: 0, icon: 'fa-soap' },
+      { id: 7, name: 'مضخة ماء (غطاس / دينامو)', qty: 0, val: 750, dayH: 1, nightH: 0, icon: 'fa-water' },
+      { id: 8, name: 'مروحة سقف أو أرضية', qty: 0, val: 50, dayH: 4, nightH: 4, icon: 'fa-wind' }
+    ];
+
+    // تبديل الواط والأمبير
+    function setUnitMode(mode) {
+      unitMode = mode;
+      const btnW = document.getElementById('btnWatt');
+      const btnA = document.getElementById('btnAmp');
+      const bannerText = document.getElementById('unitBannerText');
+
+      if (mode === 'amp') {
+        btnA.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-indigo-950 shadow-sm transition';
+        btnW.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-indigo-900 transition';
+        bannerText.innerHTML = '<i class="fa-solid fa-circle-info text-indigo-600 ml-1"></i> وحدة القياس المفعلة: <strong>التيار بالأمبير (A @ 220V)</strong>';
+      } else {
+        btnW.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-indigo-950 shadow-sm transition';
+        btnA.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-indigo-900 transition';
+        bannerText.innerHTML = '<i class="fa-solid fa-circle-info text-indigo-600 ml-1"></i> وحدة القياس المفعلة: <strong>الاستطاعة بالواط (Watt)</strong>';
+      }
+      renderCards();
+    }
+
+    // توليد كروت الأجهزة بدلاً من الجدول المزدحم
+    function renderCards() {
+      const container = document.getElementById('loadsCardsContainer');
+      container.innerHTML = '';
+
+      devices.forEach((dev, index) => {
+        const displayVal = unitMode === 'amp' ? (dev.val / 220).toFixed(2) : dev.val;
+        const unitLabel = unitMode === 'amp' ? 'أمبير' : 'واط';
+
+        const card = document.createElement('div');
+        card.className = 'bg-slate-50/80 p-3 sm:p-4 rounded-xl border border-slate-200/90 shadow-sm transition-all hover:bg-white hover:border-indigo-300';
+        card.innerHTML = `
+          <!-- رأس الكرت: اسم الجهاز وزر الحذف -->
+          <div class="flex justify-between items-center mb-2.5 pb-2 border-b border-slate-200">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center text-xs">
+                <i class="fa-solid ${dev.icon || 'fa-plug'}"></i>
+              </span>
+              <input type="text" value="${dev.name}" onchange="updateDevice(${index}, 'name', this.value)" 
+                class="font-bold text-xs sm:text-sm text-indigo-950 bg-transparent border-0 focus:ring-1 focus:ring-indigo-500 rounded px-1">
+            </div>
+            <button onclick="removeDevice(${index})" class="text-slate-300 hover:text-rose-600 p-1 transition" title="حذف">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
+
+          <!-- شبكة الخانات المقسمة عمودياً (مريحة جداً للموبايل) -->
+          <div class="grid grid-cols-4 gap-1.5 text-center divide-x-2 divide-x-reverse divide-slate-200/80">
+            
+            <!-- 1. العدد -->
+            <div class="px-1">
+              <span class="block text-[10px] font-bold text-slate-500 mb-1">العدد</span>
+              <input type="number" min="0" value="${dev.qty}" onchange="updateDevice(${index}, 'qty', this.value)"
+                class="w-full text-center font-bold text-xs sm:text-sm bg-white border border-slate-300 rounded-lg p-1.5 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600">
+            </div>
+
+            <!-- 2. الحمل -->
+            <div class="px-1">
+              <span class="block text-[10px] font-bold text-slate-500 mb-1">${unitLabel}</span>
+              <input type="number" step="0.1" min="0" value="${displayVal}" onchange="updateDeviceVal(${index}, this.value)"
+                class="w-full text-center font-bold text-xs sm:text-sm bg-white border border-slate-300 rounded-lg p-1.5 text-indigo-900 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600">
+            </div>
+
+            <!-- 3. ساعات نهار -->
+            <div class="px-1">
+              <span class="block text-[10px] font-bold text-slate-500 mb-1">ساعات النهار</span>
+              <input type="number" min="0" max="14" value="${dev.dayH}" onchange="updateDevice(${index}, 'dayH', this.value)"
+                class="w-full text-center font-semibold text-xs sm:text-sm bg-white border border-slate-300 rounded-lg p-1.5 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600">
+            </div>
+
+            <!-- 4. ساعات ليل -->
+            <div class="px-1">
+              <span class="block text-[10px] font-bold text-slate-500 mb-1">ساعات الليل</span>
+              <input type="number" min="0" max="14" value="${dev.nightH}" onchange="updateDevice(${index}, 'nightH', this.value)"
+                class="w-full text-center font-semibold text-xs sm:text-sm bg-white border border-slate-300 rounded-lg p-1.5 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600">
+            </div>
+
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateDevice(index, field, value) {
+      devices[index][field] = field === 'name' ? value : Math.max(0, parseFloat(value) || 0);
+    }
+
+    function updateDeviceVal(index, value) {
+      const num = Math.max(0, parseFloat(value) || 0);
+      devices[index].val = unitMode === 'amp' ? Math.round(num * 220) : num;
+    }
+
+    function addCustomDevice() {
+      devices.push({ id: Date.now(), name: 'جهاز إضافي جديد', qty: 1, val: 100, dayH: 2, nightH: 2, icon: 'fa-plug' });
+      renderCards();
+    }
+
+    function removeDevice(index) {
+      devices.splice(index, 1);
+      renderCards();
+    }
+
+    // محرك الحسابات الهندسية (العملية الثانية)
+    function runEngineeringEngine() {
+      const season = document.getElementById('season').value;
+      const vSys = parseFloat(document.getElementById('sysVoltage').value);
+      const panelWatt = parseFloat(document.getElementById('panelWattage').value);
+      
+      const batRaw = document.getElementById('batteryType').value.split('|');
+      const dod = parseFloat(batRaw[0]);
+      const batCategory = batRaw[1];
+      const batBrand = batRaw[2];
+
+      // ضبط ساعات سطوع الذروة (PSH) ومعامل درجات الحرارة حسب الفصل
+      let psh = 4.8;
+      let derating = 0.75;
+      let seasonBadgeText = 'تصميم سنوي معتدل';
+
+      if (season === 'summer') {
+        psh = 6.4;
+        derating = 0.70; // خسارة بسبب الحرارة العالية على الألواح
+        seasonBadgeText = '☀️ تصميم صيفي (سطوع قوي وحرارة مرتفعة)';
+      } else if (season === 'winter') {
+        psh = 3.2; // ساعات شمس قليلة وغيوم
+        derating = 0.78; // كفاءة حرارية جيدة للألواح
+        seasonBadgeText = '❄️ تصميم شتوي (حساب أيام الغيوم والبرد)';
+      }
+
+      let totalDayWh = 0;
+      let totalNightWh = 0;
+      let peakWatts = 0;
+
+      devices.forEach(dev => {
+        if (dev.qty > 0) {
+          const p = dev.qty * dev.val;
+          totalDayWh += p * dev.dayH;
+          totalNightWh += p * dev.nightH;
+          peakWatts += p;
+        }
+      });
+
+      const totalDailyWh = totalDayWh + totalNightWh;
+
+      if (totalDailyWh === 0) {
+        alert('يرجى تحديد كمية (العدد) وساعات تشغيل لجهاز واحد على الأقل أولاً!');
+        return;
+      }
+
+      // 1. حساب الألواح
+      const requiredPvWatts = totalDailyWh / (psh * derating);
+      const panelCount = Math.ceil(requiredPvWatts / panelWatt);
+      const totalPvWatts = panelCount * panelWatt;
+
+      // 2. حساب بطارية الليثيوم (الخيار الموصى به - DOD 85-90%)
+      const lithiumCapacityAh = Math.ceil(totalNightWh / (vSys * 0.88 * 0.95));
+
+      // 3. حساب بطارية الجل أو الأنبوبي (الخيار الاقتصادي - DOD 50%)
+      const leadCapacityAh = Math.ceil(totalNightWh / (vSys * 0.50 * 0.85));
+
+      // 4. حجم الإنفرتر
+      const safeWatts = peakWatts * 1.30;
+      let inverterSize = '1.5 kW';
+      if (safeWatts > 8500) inverterSize = '10 - 11 kW (3-Phase)';
+      else if (safeWatts > 6000) inverterSize = '8 kW';
+      else if (safeWatts > 3500) inverterSize = '5.5 kW / 6 kW';
+      else if (safeWatts > 1800) inverterSize = '3 kW / 3.5 kW';
+
+      // 5. مقطع الكابل والقواطع
+      const maxDcAmps = safeWatts / vSys;
+      let cable = '25';
+      if (maxDcAmps > 200) cable = '70';
+      else if (maxDcAmps > 130) cable = '50';
+      else if (maxDcAmps > 80) cable = '35';
+
+      const breaker = Math.ceil((maxDcAmps * 1.25) / 10) * 10;
+      const recChargeCurrent = Math.round(lithiumCapacityAh * 0.25);
+
+      // تعبئة الشاشة بالنتائج
+      document.getElementById('badgeSeason').innerText = seasonBadgeText;
+      document.getElementById('resTotalDailyKwh').innerText = `${(totalDailyWh / 1000).toFixed(2)} kWh/يوم`;
+      document.getElementById('resPeakAmps').innerText = `${(peakWatts / 220).toFixed(1)} أمبير`;
+
+      // الخيار 1 (ليثيوم)
+      document.getElementById('opt1Panels').innerText = `${panelCount} ألواح (${totalPvWatts.toLocaleString()} W)`;
+      document.getElementById('opt1Battery').innerText = `${lithiumCapacityAh} Ah @ ${vSys}V`;
+      document.getElementById('opt1Brand').innerText = batBrand;
+      document.getElementById('opt1Inverter').innerText = `${inverterSize} (${vSys}V)`;
+
+      // الخيار 2 (اقتصادي)
+      document.getElementById('opt2Panels').innerText = `${panelCount} ألواح`;
+      document.getElementById('opt2Battery').innerText = `${leadCapacityAh} Ah @ ${vSys}V`;
+      document.getElementById('opt2Inverter').innerText = `${inverterSize}`;
+
+      // المواصفات الهندسية
+      document.getElementById('specCable').innerText = `${cable} mm² نحاس`;
+      document.getElementById('specDcBreaker').innerText = `${breaker} A (DC)`;
+      document.getElementById('specChargeCurrent').innerText = `${recChargeCurrent} A (أقصى شحن آمن)`;
+
+      const nightAmps = totalNightWh > 0 ? ((totalNightWh / 8) / 220).toFixed(1) : '0';
+      document.getElementById('tipNightCurrent').innerText = `${nightAmps} أمبير متواصل`;
+
+      // إظهار النتائج
+      const report = document.getElementById('reportSection');
+      report.classList.remove('hidden');
+      report.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.onload = () => {
+      renderCards();
+    };
+  </script>
+</body>
+</html>
